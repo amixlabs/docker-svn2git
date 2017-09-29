@@ -1,0 +1,15 @@
+language: bash
+services: docker
+
+before_script:
+- docker build -t amixsi/svn2git:latest -t amixsi/svn2git:1.0 -t amixsi/svn2git:1 .
+
+script:
+- docker run --rm -it amixsi/svn2git git --version
+- docker run --rm -it amixsi/svn2git git svn --version
+- docker run --rm -it amixsi/svn2git ssh -V
+- docker run --rm -it amixsi/svn2git svn --version
+
+after_success:
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- docker push amixsi/svn2git
