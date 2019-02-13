@@ -9,4 +9,4 @@ RUN apk add --update \
 
 VOLUME /wrk
 
-ENTRYPOINT [ "/bin/bash", "--init-file", "/etc/.shinit" ]
+CMD [ "/bin/bash", "--init-file", "/etc/.shinit" ]
