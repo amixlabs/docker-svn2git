@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 eval "$(ssh-agent)"
 
@@ -13,5 +13,5 @@ svn_generate_authors() {
 }
 
 svn_git() {
-    git svn clone "$SVN_URL_ROOT" --no-metadata -A "$AUTHORS" --stdlayout /tmp/repo
+    git svn clone "$SVN_URL_ROOT" --no-metadata -A "$AUTHORS" --stdlayout /wrk/repo
 }

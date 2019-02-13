@@ -5,6 +5,8 @@ ENV ENV=/etc/.shinit
 ADD shinit.sh /etc/.shinit
 
 RUN apk add --update \
-    git git-svn git-perl openssh subversion
+    git git-svn git-perl openssh subversion bash
 
 VOLUME /wrk
+
+ENTRYPOINT [ "/bin/bash", "--init-file", "/etc/.shinit" ]

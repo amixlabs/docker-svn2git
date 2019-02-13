@@ -2,8 +2,10 @@
 
 Utilize a imagem docker `amixsi/svn2git` para obter os comandos necessários para conversão.
 
-```
-docker run --rm -it -v $(pwd):/wrk amixsi/svn2git
+```sh
+docker run --rm -it -v $(pwd):/wrk "$HOME":/keys amixsi/svn2git
+# Add keys to ssh-agent
+ssh-add /keys/id_rsa
 ```
 
 ## Caso de uso
@@ -12,15 +14,19 @@ Projeto RNCRM
 
 ## Migrando as dependências externas
 
-Aplicar o mesmo processo abaixo para cada item:
+Aplicar o mesmo processo abaixo para cada `submodulo`:
 
-mdr svn+ssh://amsxp02/Work/prj/mdr/branches/rncrm
-logging svn+ssh://amsxp02/Work/prj/php-pkg-logging/trunk/logging
-exception svn+ssh://amsxp02/Work/prj/php-pkg-exception/trunk/exception
-xml svn+ssh://amsxp02/Work/prj/php-pkg-xml/trunk/xml
+- mdr svn+ssh://amsxp02/Work/prj/mdr/branches/rncrm
+- logging svn+ssh://amsxp02/Work/prj/php-pkg-logging/trunk/logging
+- exception svn+ssh://amsxp02/Work/prj/php-pkg-exception/trunk/exception
+- xml svn+ssh://amsxp02/Work/prj/php-pkg-xml/trunk/xml
 
-```
+```sh
+# Variáveis necessárias
+AUTHORS=/wrk/authors.txt
 SVN_URL_ROOT=svn+ssh://amsxp02/Work/prj/mdr
+
+# Gerar arquivo de autores para ser convertido para o layout do git
 svn_generate_authors
 vi /wrk/authors.txt
 svn_git
@@ -70,3 +76,15 @@ cp .git/refs/remotes/origin/* .git/refs/heads/
 git push -u origin --all
 git push origin --tags
 ```
+
+## Adicionando mensagem aos usuários do repositório SVN migrado
+
+Crie o *hook* `repository/hooks/pre-commit`:
+
+```sh
+#!/bin/sh
+echo "No more commit here - this is an archive branch" 1>&2
+exit 1
+```
+
+> [Referência](https://stackoverflow.com/questions/2411122/how-to-freeze-entire-svn-repository-to-make-it-read-only)
